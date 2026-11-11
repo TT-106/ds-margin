@@ -1,0 +1,251 @@
+:host {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  flex: 0 1 auto;
+  color: var(--dsm-ink);
+  font: 13px/1.5 var(--dsm-font-ui);
+}
+:host([hidden]) { display: none; }
+
+*, *::before, *::after { box-sizing: border-box; }
+ul, p { margin: 0; padding: 0; }
+ul { list-style: none; }
+button, input, a { color: inherit; font: inherit; }
+button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+button:disabled { opacity: .55; cursor: default; }
+a { text-decoration: none; }
+svg { flex: none; }
+:is(button, a, input):focus-visible {
+  outline: 2px solid var(--dsm-focus-line);
+  outline-offset: -2px;
+}
+
+.project-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-block-size: calc(100dvh - 118px);
+  min-height: 0;
+  padding: 4px 6px 8px;
+}
+.project-sidebar[data-drawer] { max-block-size: max(360px, calc(100dvh - 118px)); }
+.ps-tools, .ps-heading, .ps-project-title, .ps-conversation, .ps-history {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.ps-tools { gap: 6px; }
+.ps-new-chat, .ps-icon, .ps-side-question {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--dsm-radius-control);
+}
+.ps-new-chat {
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
+  min-height: 37px;
+  padding: 4px 9px;
+  border: 1px solid var(--dsm-line);
+  background: var(--dsm-surface-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ps-new-chat:hover:not(:disabled), .ps-new-chat:active:not(:disabled) { background: var(--dsm-selected); }
+.ps-icon {
+  flex: 0 0 auto;
+  width: 30px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--dsm-muted);
+}
+.ps-tools .ps-icon { width: 35px; min-height: 37px; }
+.ps-icon:hover:not(:disabled), .ps-icon[aria-expanded="true"], .ps-side-question:hover {
+  background: var(--dsm-hover);
+  color: var(--dsm-ink);
+}
+.ps-heading {
+  justify-content: space-between;
+  padding-inline-start: 8px;
+  margin-block-start: 6px;
+  color: var(--dsm-muted);
+  font-weight: 600;
+}
+.ps-privacy, .ps-form {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  margin-block: 2px;
+  border: 1px solid var(--dsm-line);
+  border-radius: var(--dsm-radius-control);
+  background: var(--dsm-surface);
+  overflow-wrap: anywhere;
+}
+.ps-privacy p, .ps-hint, .ps-status { color: var(--dsm-muted); font-size: 12px; }
+.ps-privacy button, .ps-form-actions button, .ps-text-action {
+  min-height: 30px;
+  padding-inline: 7px;
+  border-radius: 6px;
+}
+.ps-privacy button { justify-self: end; color: var(--dsm-accent); }
+.ps-privacy button:hover, .ps-form-actions button:hover, .ps-text-action:hover { background: var(--dsm-hover); }
+.ps-form-actions { display: flex; justify-content: flex-end; gap: 4px; }
+.ps-form-actions .ps-accent {
+  background: var(--dsm-accent);
+  color: var(--dsm-on-accent);
+}
+.ps-form-actions .ps-accent:hover:not(:disabled) { background: color-mix(in srgb, var(--dsm-accent) 88%, var(--dsm-ink)); }
+.ps-danger, .ps-menu-action[data-danger], .ps-status[role="alert"] { color: var(--dsm-error); }
+.ps-scroll {
+  min-height: 0;
+  padding: 2px 1px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--dsm-muted) 46%, transparent) transparent;
+}
+.project-sidebar[data-drawer] .ps-scroll { overscroll-behavior-y: auto; }
+.project-sidebar[data-native-view] .ps-scroll:not(.ps-search-results) { max-block-size: min(34dvh, 296px); }
+.ps-project-title {
+  border-radius: var(--dsm-radius-control);
+}
+.ps-project-title[data-expanded] {
+  background: color-mix(in srgb, var(--dsm-selected) 50%, transparent);
+}
+.ps-disclosure {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  min-width: 0;
+  padding: 4px 7px;
+  border-radius: inherit;
+  font-weight: 600;
+  text-align: start;
+}
+.ps-disclosure span, .ps-conversation-copy > span, .ps-conversation-copy small, .ps-menu-action span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ps-disclosure svg { color: var(--dsm-muted); transform: rotate(-90deg); }
+.ps-disclosure[aria-expanded="true"] svg { transform: none; }
+.ps-disclosure:hover { background: var(--dsm-hover); }
+.ps-conversations { margin: 2px 0 5px 8px; padding-inline-start: 4px; border-inline-start: 1px solid var(--dsm-line); }
+.ps-conversation { gap: 1px; border-radius: 8px; }
+.ps-conversation[data-current] { background: var(--dsm-selected); }
+.ps-conversation:hover { background: var(--dsm-hover); }
+.ps-conversation[data-current]:hover { background: color-mix(in srgb, var(--dsm-selected) 92%, var(--dsm-ink)); }
+.ps-conversation > :is(a, .ps-opened-title) {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  min-width: 0;
+  padding: 3px 5px;
+  border-radius: 8px;
+}
+.ps-conversation-copy { display: grid; min-width: 0; }
+.ps-conversation-copy small { font-size: 12px; color: var(--dsm-muted); }
+.ps-conversation > a > svg { color: var(--dsm-accent); }
+.ps-side-question {
+  min-height: 26px;
+  padding: 1px 4px;
+  color: var(--dsm-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.ps-current {
+  padding-block-start: 5px;
+  margin-block-start: 4px;
+  border-block-start: 1px solid var(--dsm-line);
+}
+.ps-current > span { padding-inline-start: 6px; color: var(--dsm-muted); font-size: 12px; }
+.ps-hint { padding: 3px 8px 8px; }
+.ps-project-empty { padding: 5px 8px 8px 27px; }
+.ps-status { padding: 2px 7px; overflow-wrap: anywhere; }
+.ps-search-controls { display: grid; gap: 5px; }
+.ps-search-controls input, .ps-form input {
+  width: 100%;
+  min-width: 0;
+  min-height: 35px;
+  border: 1px solid var(--dsm-line);
+  border-radius: var(--dsm-radius-control);
+  background: var(--dsm-surface);
+  padding: 4px 7px;
+}
+.ps-search-controls input::placeholder { color: var(--dsm-muted); opacity: 1; }
+.ps-search-scope { display: flex; gap: 2px; }
+.ps-search-scope button {
+  min-height: 30px;
+  padding: 3px 5px;
+  border-radius: 7px;
+  color: var(--dsm-muted);
+  font-size: 12px;
+  text-align: start;
+}
+.ps-search-scope button:hover { background: var(--dsm-hover); }
+.ps-search-scope button[aria-pressed="true"] { background: var(--dsm-selected); color: var(--dsm-ink); }
+.ps-text-action { color: var(--dsm-accent); font-size: 12px; }
+.ps-history {
+  gap: 7px;
+  min-height: 35px;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--dsm-line);
+  border-radius: var(--dsm-radius-control);
+  color: var(--dsm-muted);
+  text-align: start;
+}
+.ps-history span { flex: 1; }
+.ps-history:hover { background: var(--dsm-hover); color: var(--dsm-ink); }
+.ps-history[aria-current="page"] { color: var(--dsm-ink); background: var(--dsm-selected); }
+.ps-history:not([aria-current]) svg:last-child { transform: rotate(-90deg); }
+.ps-menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 4px;
+  min-width: 0;
+  max-width: calc(100dvw - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--dsm-line);
+  border-radius: var(--dsm-radius-control);
+  background: var(--dsm-surface);
+  color: var(--dsm-ink);
+  box-shadow: var(--dsm-shadow-float);
+}
+.ps-menu-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 34px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-align: start;
+}
+.ps-menu-action:hover, .ps-menu-action:focus-visible { background: var(--dsm-hover); }
+
+@media (pointer: coarse) {
+  .project-sidebar { padding-inline: 8px; }
+  .ps-tools .ps-icon, .ps-icon { width: 44px; }
+  :is(.ps-tools .ps-icon, .ps-new-chat, .ps-icon, .ps-disclosure, .ps-conversation > a, .ps-side-question, .ps-menu-action,
+    .ps-history, .ps-search-scope button, .ps-text-action, .ps-privacy button, .ps-form-actions button, .ps-form input,
+    .ps-search-controls input) { min-height: 44px; }
+}
+
+@media (forced-colors: active) {
+  :is(.ps-disclosure, .ps-conversation > a, .ps-history)[aria-current], .ps-project-title[data-expanded] { outline: 1px solid Highlight; }
+}

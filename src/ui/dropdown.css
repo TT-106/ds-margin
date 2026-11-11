@@ -1,0 +1,65 @@
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--dsm-line);
+  border-radius: var(--dsm-radius-control);
+  background: var(--dsm-surface);
+  color: var(--dsm-ink);
+  font: 12px/1.5 var(--dsm-font-ui);
+  text-align: start;
+  cursor: pointer;
+}
+.dropdown-trigger > span { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dropdown-trigger > svg { flex-shrink: 0; color: var(--dsm-muted); }
+.dropdown-trigger:hover:not(:disabled) { background: color-mix(in srgb,var(--dsm-surface) 95%,var(--dsm-ink)); }
+.dropdown-trigger[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--dsm-focus-border);
+  box-shadow: var(--dsm-focus-ring);
+}
+.dropdown-trigger:focus-visible {
+  outline: none;
+  border-color: var(--dsm-focus-line);
+  box-shadow: var(--dsm-focus-ring);
+}
+.dropdown-trigger:disabled { opacity: .45; cursor: not-allowed; }
+.dropdown-menu {
+  position: fixed;
+  inset: auto;
+  box-sizing: border-box;
+  max-height: 272px;
+  margin: 0;
+  padding: 4px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--dsm-glass-border);
+  border-radius: var(--dsm-radius-control);
+  background: var(--dsm-surface);
+  color: var(--dsm-ink);
+  box-shadow: var(--dsm-shadow-float);
+  font: 12px/1.5 var(--dsm-font-ui);
+  pointer-events: auto;
+}
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  min-height: 34px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.dropdown-option[aria-selected="true"] { color: var(--dsm-accent); }
+.dropdown-option[data-active] { background: var(--dsm-selected); }
+.dropdown-option > svg { flex-shrink: 0; }
+@media (forced-colors: active) {
+  .dropdown-trigger:focus-visible, .dropdown-option[data-active] { outline: 1px solid Highlight; }
+}

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS Margin 项目侧栏隔离测试</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.65 system-ui; }
+  #root { display: flex; height: 100vh; }
+  aside { flex: 0 0 236px; min-width: 0; overflow: auto; padding: 12px; background: #f3f4f6; }
+  aside h1 { margin: 0 0 12px; }
+  aside button { max-width: 100%; }
+  nav { margin-top: 12px; }
+  .history-row { display: flex; align-items: center; justify-content: space-between; }
+  .history-row a { color: inherit; text-decoration: none; min-width: 0; padding: 6px; }
+  .workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  header { padding: 16px 24px; }
+  main { flex: 1; overflow: auto; padding: 24px; }
+  #messages { max-width: 840px; margin: auto; }
+  [data-virtual-list-item-key] { margin-bottom: 14px; }
+  .ds-textarea { width: min(840px, calc(100% - 40px)); margin: 0 auto 22px; padding: 12px; }
+  textarea { width: 100%; height: 72px; resize: none; }
+  button { font: inherit; }
+  @media (max-width: 750px) { aside { display: none; } }
+</style>
+<div id="root">
+  <aside>
+    <h1 data-native-logo>DeepSeek</h1>
+    <button type="button" data-native-action="new-chat">开启新对话</button>
+    <nav aria-label="对话历史" data-native-history>
+      <span>今天</span>
+      <div id="history-rows"></div>
+      <button type="button" id="load-older">加载更早对话</button>
+    </nav>
+  </aside>
+  <div class="workspace">
+    <header data-native-header><span data-native-chat-title></span></header>
+    <main><div id="messages"></div><p id="native-status" role="status"></p></main>
+    <div class="ds-textarea" data-native-composer>
+      <textarea class="ds-textarea__textarea" aria-label="给 DeepSeek 发送消息" placeholder="给 DeepSeek 发送消息"></textarea>
+      <button type="button" aria-label="发送" data-native-action="send" disabled>↑</button>
+    </div>
+  </div>
+</div>
+<script>
+  const input = document.querySelector('textarea');
+  const sendButton = document.querySelector('[data-native-action="send"]');
+  const newButton = document.querySelector('[data-native-action="new-chat"]');
+  const oldButton = document.getElementById('load-older');
+  const rows = document.getElementById('history-rows');
+  const status = document.getElementById('native-status');
+  const messages = document.getElementById('messages');
+  const chatTitle = document.querySelector('[data-native-chat-title]');
+  const id = () => location.pathname.match(/^\/a\/chat\/s\/([^/]+)$/)?.[1] ?? '';
+  const sessionPath = sessionId => `/a/chat/s/${sessionId}`;
+  let showOlder = false;
+  let revision = 0;
+  let sending = false;
+
+  function updateSend() {
+    sendButton.disabled = sending || !input.value.trim();
+  }
+
+  function message(key, role, text) {
+    const row = document.createElement('div');
+    row.dataset.virtualListItemKey = String(key);
+    row.dataset.messageRole = role;
+    const body = document.createElement('div');
+    body.dataset.messageContent = '';
+    body.textContent = text;
+    row.append(body);
+    return row;
+  }
+
+  function historyRow(session) {
+    const row = document.createElement('div');
+    row.className = 'history-row';
+    const link = document.createElement('a');
+    link.href = sessionPath(session.id);
+    link.textContent = session.title;
+    link.dataset.nativeSessionTitle = '';
+    if (session.id === id()) link.setAttribute('aria-current', 'page');
+    link.addEventListener('click', event => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      navigate(link.pathname);
+    });
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = '删除';
+    remove.setAttribute('aria-label', `原站删除 ${session.id}`);
+    remove.addEventListener('click', async () => {
+      const response = await fetch('/api/v0/chat_session/delete', {
+        method: 'POST', body: JSON.stringify({ chat_session_ids: [session.id] }),
+      });
+      const result = await response.json();
+      const removed = result.code === 0 && result.data?.biz_code === 0;
+      status.textContent = removed ? '原站确认删除' : '原站删除失败';
+      if (removed) await render();
+    });
+    row.append(link, remove);
+    return row;
+  }
+
+  async function render() {
+    const rendering = ++revision;
+    const query = new URLSearchParams({ id: id(), older: String(showOlder) });
+    const response = await fetch(`/__fixture__/project-state?${query}`);
+    const { session, history } = await response.json();
+    if (rendering !== revision) return;
+    chatTitle.textContent = session?.title ?? '新对话';
+    messages.replaceChildren(...(session?.turns ?? []).flatMap((turn, index) => [
+      message(index * 2 + 1, 'user', turn.prompt), message(index * 2 + 2, 'assistant', turn.answer),
+    ]));
+    rows.replaceChildren(...history.map(historyRow));
+    oldButton.hidden = showOlder;
+  }
+
+  function navigate(path) {
+    history.pushState(null, '', path);
+    input.value = '';
+    sending = false;
+    status.textContent = '';
+    messages.replaceChildren();
+    updateSend();
+    void render();
+  }
+
+  async function sendMessage() {
+    if (sending || !input.value.trim()) return;
+    const request = ++revision;
+    const prompt = input.value;
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    sending = true;
+    updateSend();
+    const response = await fetch('/__fixture__/project-send', {
+      method: 'POST', body: JSON.stringify({ id: id(), prompt }),
+    });
+    const result = await response.json();
+    if (request !== revision) return;
+    if (result.error) {
+      status.textContent = result.error;
+      sending = false;
+      updateSend();
+      return;
+    }
+    navigate(sessionPath(result.id));
+  }
+
+  newButton.addEventListener('click', () => navigate('/'));
+  oldButton.addEventListener('click', () => { showOlder = true; void render(); });
+  sendButton.addEventListener('click', () => void sendMessage());
+  input.addEventListener('input', updateSend);
+  input.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+    event.preventDefault();
+    void sendMessage();
+  });
+  window.addEventListener('popstate', () => void render());
+  void render();
+</script>
+</html>

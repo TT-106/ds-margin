@@ -1,0 +1,28 @@
+.dsm-side-count {
+  position: fixed;
+  z-index: 6;
+  transform: translate(-100%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 26px;
+  padding: 0 5px 0 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dsm-surface, #f8f5ed) 94%, transparent);
+  color: var(--dsm-muted, #6f685c);
+  font: 500 11px/1.2 var(--dsm-font-ui, system-ui);
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.dsm-side-count:hover, .dsm-side-count[aria-expanded="true"] {
+  background: var(--dsm-selected, #ede8df);
+  border-color: var(--dsm-line, #e3dbcf);
+  color: var(--dsm-ink, #302a23);
+}
+.dsm-side-count:focus-visible { outline: 2px solid var(--dsm-accent, #9b3b2c); }
+.dsm-side-count svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+.dsm-side-count-fallback { left: 12px; top: 62px; transform: none; }
+
+:host-context(html[data-dsm-project-current-row]) .dsm-side-count-fallback { display: none; }

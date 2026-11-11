@@ -1,0 +1,25 @@
+/* Cover the native first paint without changing the layout the adapter measures. */
+:root {
+  --dsm-startup-paper: #f5f2ea;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-dsm-startup="light"]) { --dsm-startup-paper: #211f1c; }
+}
+
+:root[data-dsm-startup="dark"] { --dsm-startup-paper: #211f1c; }
+
+:root:not([data-dsm-startup="ready"])::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: var(--dsm-startup-paper);
+  /* Release the page even if the content script never starts. */
+  animation: dsm-release-startup 2.5s steps(1, end) forwards !important;
+}
+
+@keyframes dsm-release-startup {
+  from { visibility: visible; }
+  to { visibility: hidden; }
+}

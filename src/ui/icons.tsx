@@ -1,0 +1,31 @@
+const paths: Record<string, string> = {
+  book:'M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4z M13 7a3 3 0 0 1 3-3h5v15h-4a4 4 0 0 0-4 2',
+  outline:'M9 5h12M9 12h12M9 19h12M3 5h1M3 12h1M3 19h1',
+  search:'M21 21l-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',
+  star:'m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z',
+  shelf:'M3 20h18M5 4h4v13H5zM10 4h4v13h-4zM15 5l3.2-1.2 4.1 12.2-3.2 1.1z',
+  command:'M4 5h16v14H4zM7 9l3 3-3 3M12 15h5',
+  more:'M4.5 12h1.6m5.1 0h1.6m5.1 0h1.6',
+  prompt:'M4 4h16v13H8l-4 4zM8 9h8M8 13h5',
+  settings:'M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6',
+  close:'m6 6 12 12M6 18 18 6',
+  arrow:'M5 12h14m-6-6 6 6-6 6',
+  external:'M14 3h7v7m0-7L10 14M10 3H4v17h17v-6',
+  focus:'M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M8 8h8v8H8z',
+  download:'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',
+  plus:'M12 4v16M4 12h16',
+  back:'M19 12H5m6-6-6 6 6 6',
+  check:'m4 12 5 5L20 6',
+  copy:'M8 8h13v13H8zM16 8V3H3v13h5',
+  pin:'m8 3 8 0-1 5 4 4v2H5v-2l4-4zM12 14v7',
+  trash:'M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7',
+  sun:'M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+  alert:'M12 7v5m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',
+  clock:'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',
+  down:'M12 4v15m-6-6 6 6 6-6',
+  minus:'M6 12h12',
+  chevronDown:'m6 9 6 6 6-6',
+};
+export function Icon({ name, size = 18 }: { name: string; size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name] ?? paths.book}/></svg>;
+}

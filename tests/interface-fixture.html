@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>固态电池产业链调研</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #263143; background: #f6f9ff; font: 14px/1.6 system-ui; }
+    #root { display: flex; height: 100vh; }
+    aside { width: 234px; padding: 24px 15px; flex: none; background: #eef3ff; overflow: auto; }
+    aside h1 { margin: 4px 9px 23px; font: 700 26px/1 system-ui; color: #4d6bfe; }
+    aside button { display: flex; gap: 8px; align-items: center; width: 100%; padding: 9px; text-align: left; }
+    aside nav { margin-top: 27px; }
+    aside nav span { display: block; padding: 8px 9px 4px; }
+    aside a { display: block; padding: 8px 9px; margin: 3px 0; color: #29334a; text-decoration: none; }
+    aside a[aria-current] { background: #dfe6fd; }
+    aside a:hover { background: #ebeffa; }
+    .workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .site-header { min-height: 58px; display: flex; align-items: center; padding: 0 28px; border-bottom: 1px solid #dde3ef; }
+    .reading { flex: 1; overflow: auto; padding: 28px 40px 16px; }
+    .column { max-width: 840px; margin-inline: auto; }
+    .ds-message { margin-block-end: 8px; }
+    .d29f3d7d { display: flex; flex-direction: column; align-items: flex-end; }
+    .fbb737a4 { padding: 10px 16px; background: #e9eeff; white-space: pre-wrap; }
+    .ds-markdown p { margin: 0 0 1em; }
+    .ds-markdown li + li { margin-block-start: .4em; }
+    .md-code-block { background: #f5f7ff; margin: 18px 0; }
+    .md-code-block-banner { display: flex; justify-content: space-between; padding: 8px 14px; background: #e6ebfb; }
+    .md-code-block pre { margin: 0; padding: 13px 14px; }
+    .token.keyword { color: #992ac4; }
+    .token.string { color: #1a9230; }
+    .token.number { color: #ee9333; }
+    .token.function { color: #3b66fd; }
+    .token.comment { color: #97a1be; }
+    .composer-area { padding: 0 40px 16px; }
+    .ds-textarea { margin: auto; max-width: 840px; background: #fff; border-radius: 20px; padding: 12px 14px; }
+    textarea { display: block; width: 100%; height: 58px; resize: none; border: 0; background: none; outline: none; }
+    .actions, .modes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .actions { justify-content: space-between; }
+    button { font: 12px/1.6 system-ui; cursor: pointer; padding: 6px 11px; border: 1px solid #cbd4e9; border-radius: 9px; background: #eef3ff; }
+    .ds-toggle-button--selected { background: #dce8ff; color: #3157de; }
+    .fixture-fixed .composer-area { position: fixed; inset: auto 0 0; width: 100%; }
+    @media (max-width: 750px) { aside { display:none; } }
+    @media (max-width: 480px) { .ds-textarea { padding: 10px; } .modes button { padding: 5px 7px; } }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <aside>
+      <h1 data-native-logo>deepseek</h1>
+      <button type="button" data-native-action="new-chat">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg>
+        开启新对话
+      </button>
+      <nav data-native-history aria-label="对话历史">
+        <span>今天</span>
+        <a href="/a/chat/s/solid-state-battery" aria-current="page">固态电池产业链调研</a>
+        <a href="/a/chat/s/battery-pilot-line">从中试到量产：验证清单</a>
+        <a href="/a/chat/s/solid-electrolyte">固态电解质路线比较</a>
+        <span>昨天</span>
+        <a href="/a/chat/s/battery-disclosure">电池企业披露材料整理</a>
+        <a href="/a/chat/s/evidence-review">研究笔记的证据分级</a>
+      </nav>
+    </aside>
+    <div class="workspace">
+      <header class="site-header"><span data-native-chat-title>固态电池产业链调研</span></header>
+      <main class="reading">
+        <div class="column">
+          <div data-virtual-list-item-key="1" class="ds-message d29f3d7d"><div class="fbb737a4">梳理固态电池产业链。先给我一条能用公开资料逐步核查的调研路线。</div></div>
+          <div data-virtual-list-item-key="2" class="ds-message">
+            <div class="ds-markdown ds-assistant-message-main-content">
+              <h1>固态电池产业链调研</h1>
+              <p>先把产业链拆成材料、电芯和应用三个环节，再沿着同一条线追问：谁在做、做到了哪一步、有哪些公开证据可以交叉核对。</p>
+              <h2>从材料读到验证</h2>
+              <div class="md-code-block md-code-block-light">
+                <div class="md-code-block-banner-wrap"><div class="md-code-block-banner"><span class="md-code-block-infostring">text</span><div class="md-code-block-action"><button data-native-copy>复制</button></div></div></div>
+                <pre><code class="language-text">电解质材料 → 电芯工艺 → 样品验证 → 应用导入</code></pre>
+              </div>
+              <h3>先查公开披露的验证节点</h3>
+              <p>把<span>"</span><strong>量产</strong><span>"</span>拆成可以逐项核查的说法。分别记录样品、验证对象、产线规模和披露时间，保留每个判断背后的出处。</p>
+              <div class="md-code-block md-code-block-light">
+                <div class="md-code-block-banner-wrap"><div class="md-code-block-banner"><span class="md-code-block-infostring">typescript</span><div class="md-code-block-action"><button data-native-copy>复制</button></div></div></div>
+                <pre><code class="language-typescript"><span class="token keyword">const</span> stages = [<span class="token string">'样品'</span>, <span class="token string">'中试'</span>, <span class="token string">'量产'</span>];
+<span class="token function">review</span>(stages[<span class="token number">0</span>]); <span class="token comment">// 从可核查的节点开始</span></code></pre>
+              </div>
+              <h2>按证据建表</h2>
+              <p>每条记录保留披露主体、材料名称、技术路线、验证阶段和原始链接。后续遇到同一公司的重复披露时，按时间顺序对照。</p>
+              <ol>
+                <li>材料：优先记录成分路线、样品规格、交付对象和验证条件。</li>
+                <li>电芯：区分实验样品、中试线和有明确客户的产线验证。</li>
+                <li>应用：核对测试合作、装车验证、批量交付对应的日期与出处。</li>
+              </ol>
+              <p>建议先选一个环节，找两份可追溯的公开材料，再把相同方法用于其他环节。</p>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="composer-area">
+        <div class="ds-textarea" data-native-composer>
+          <textarea class="ds-textarea__textarea" aria-label="给 DeepSeek 发送消息" placeholder="给 DeepSeek 发送消息"></textarea>
+          <div class="actions">
+            <div class="modes">
+              <button class="ds-toggle-button ds-toggle-button--selected" data-native-mode="think" aria-pressed="false">深度思考</button>
+              <button class="ds-toggle-button" data-native-mode="search" aria-pressed="true">智能搜索</button>
+            </div>
+            <div>
+              <button data-native-action="send" aria-label="发送" disabled>↑</button>
+              <button data-native-action="stop" aria-label="停止生成" hidden>■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (location.search.includes('fixed=1')) document.body.classList.add('fixture-fixed');
+    window.interfaceFixture = { copies: 0 };
+    document.querySelectorAll('[data-native-copy]').forEach(button => button.onclick = () => {
+      window.interfaceFixture.copies++;
+      button.textContent = '已复制';
+    });
+    document.querySelectorAll('[data-native-mode]').forEach(button => button.onclick = () => {
+      button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
+    });
+  </script>
+</body>
+</html>

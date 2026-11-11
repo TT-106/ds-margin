@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>DS Margin 旁问隔离测试</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #faf9f5; color: #30302e; font: 15px/1.7 system-ui; }
+    #root { display: flex; height: 100vh; }
+    aside { width: 222px; padding: 24px; background: #f6f4ee; flex: none; overflow: auto; }
+    aside h1 { font-size: 24px; font-weight: 600; margin: 0 0 22px; }
+    aside a { display: block; color: inherit; text-decoration: none; margin: 10px 0; }
+    .workspace { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+    header { padding: 20px 30px; border-bottom: 1px solid #ddd; }
+    main { flex: 1; overflow: auto; padding: 24px 40px; }
+    #messages { max-width: 800px; margin: auto; }
+    [data-virtual-list-item-key] { margin-bottom: 16px; }
+    .fbb737a4 { border-radius: 14px; padding: 16px; white-space: pre-wrap; background: #f1eee8; }
+    .ds-assistant-message-main-content { white-space: pre-wrap; }
+    .ds-think-content { font-size: 12px; padding: 8px 12px; border-left: 2px solid #b1a493; }
+    .ds-textarea { margin: 12px auto 24px; width: min(760px, calc(100% - 55px)); padding: 15px; }
+    textarea { width: 100%; height: 72px; resize: none; border: 0; background: transparent; color: inherit; }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    button { font: inherit; color: inherit; cursor: pointer; padding: 7px 12px; border-radius: 9px; }
+    .ds-toggle-button { border: 1px solid #4d6bfe; color: #4166ea; background: #f4f7ff; }
+    .ds-toggle-button[aria-pressed="true"] { background: #dce8ff; }
+    .submit { margin-left: auto; }
+    [role="alert"] { color: #9b4c35; padding: 10px; }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <aside>
+      <h1>DeepSeek</h1>
+      <button id="new-chat" data-native-action="new-chat">开启新对话</button>
+      <nav data-native-history aria-label="对话历史">
+        <span>今天</span><div id="history"></div>
+        <a href="/a/chat/s/ordinary-notes">公开资料核查笔记</a>
+      </nav>
+    </aside>
+    <div class="workspace">
+      <header>旁问隔离测试</header>
+      <main><div id="messages"></div><div id="error" role="alert" hidden></div></main>
+      <div class="ds-textarea" data-native-composer>
+        <textarea class="ds-textarea__textarea" aria-label="给 DeepSeek 发送消息" placeholder="给 DeepSeek 发送消息"></textarea>
+        <div class="controls">
+          <button class="ds-toggle-button" data-native-mode="think" aria-pressed="false">深度思考</button>
+          <button class="ds-toggle-button" data-native-mode="search" aria-pressed="false">智能搜索</button>
+          <button class="submit" id="send" aria-label="发送" disabled>↑</button>
+          <button class="submit" id="stop" aria-label="停止生成" hidden>■</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const input = document.querySelector('textarea');
+    const messages = document.getElementById('messages');
+    const send = document.getElementById('send');
+    const stop = document.getElementById('stop');
+    const error = document.getElementById('error');
+    const mode = { think: false, search: false };
+    let running = false;
+    let last = '';
+    let revision = 0;
+    const id = () => location.pathname.match(/\/a\/chat\/s\/(.+)$/)?.[1] ?? '';
+    function addMessage(key, role, text, thinking) {
+      const row = document.createElement('div');
+      row.dataset.virtualListItemKey = key;
+      const bubble = document.createElement('div');
+      bubble.className = role === 'user' ? 'ds-message d29f3d7d' : 'ds-message';
+      if (thinking) {
+        const thought = document.createElement('div');
+        thought.className = 'ds-think-content';
+        thought.textContent = '这段思考不属于最终回答，伪造结果 INVALID_THOUGHT。';
+        bubble.append(thought);
+      }
+      const body = document.createElement('div');
+      body.className = role === 'user' ? 'fbb737a4' : 'ds-markdown ds-assistant-message-main-content';
+      body.textContent = text;
+      bubble.append(body);
+      row.append(bubble);
+      messages.append(row);
+    }
+    function updateButtons() {
+      stop.hidden = !running;
+      send.hidden = running;
+      send.disabled = running || !input.value.trim();
+    }
+    function render(state) {
+      if (JSON.stringify(state) === last) return;
+      last = JSON.stringify(state);
+      messages.replaceChildren();
+      running = state.running;
+      if (state.prompt) addMessage('1', 'user', state.prompt, false);
+      if (state.answer || state.running) addMessage('2', 'assistant', state.answer, state.think);
+      if (state.running && state.search) {
+        const status = document.createElement('div');
+        status.dataset.nativeStatus = 'search';
+        status.setAttribute('role', 'status');
+        status.textContent = '搜索中...';
+        messages.append(status);
+      }
+      error.hidden = !state.error;
+      error.textContent = state.error ?? '';
+      document.getElementById('history').replaceChildren(...state.history.map(chat => {
+        const anchor = document.createElement('a');
+        anchor.href = '/a/chat/s/' + chat.id;
+        anchor.textContent = chat.title;
+        return anchor;
+      }));
+      updateButtons();
+    }
+    async function update() {
+      const current = revision;
+      const response = await fetch('/__fixture__/state?id=' + encodeURIComponent(id()));
+      const data = await response.json();
+      if (current === revision) render(data);
+    }
+    document.querySelectorAll('[data-native-mode]').forEach(button => {
+      button.onclick = () => {
+        const kind = button.dataset.nativeMode;
+        mode[kind] = !mode[kind];
+        button.setAttribute('aria-pressed', String(mode[kind]));
+      };
+    });
+    document.getElementById('new-chat').onclick = () => {
+      revision++;
+      history.pushState(null, '', '/');
+      messages.replaceChildren();
+      input.value = '';
+      running = false;
+      last = '';
+      error.hidden = true;
+      updateButtons();
+      void update();
+    };
+    send.onclick = async () => {
+      if (running || !input.value.trim()) return;
+      revision++;
+      const prompt = input.value;
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      running = true;
+      updateButtons();
+      const response = await fetch('/__fixture__/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, mode }) });
+      const result = await response.json();
+      revision++;
+      history.pushState(null, '', '/a/chat/s/' + result.id);
+      last = '';
+      await update();
+    };
+    stop.onclick = async () => {
+      await fetch('/__fixture__/stop?id=' + encodeURIComponent(id()), { method: 'POST' });
+      await update();
+    };
+    input.addEventListener('input', updateButtons);
+    setInterval(() => void update(), 180);
+    void update();
+  </script>
+</body>
+</html>

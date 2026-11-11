@@ -1,0 +1,87 @@
+:root:is(.dsm-enabled, .dsm-popup) {
+  --dsm-paper: #F5F2EA;
+  --dsm-surface: #FDFBF6;
+  --dsm-surface-2: #EFEBE2;
+  --dsm-ink: #2B2926;
+  --dsm-muted: #6B675F;
+  --dsm-line: #DCD5C8;
+  --dsm-accent: #A1442E;
+  --dsm-on-accent: #FFFDF9;
+  --dsm-selected: #ECE6D8;
+  --dsm-ok: #5E7B58;
+  --dsm-error: #9F2D27;
+  --dsm-glass: rgb(255 252 244 / .47);
+  --dsm-panel-glass: rgb(255 253 247 / .50);
+  --dsm-modal-glass: rgb(253 251 245 / .85);
+  --dsm-glass-shine: rgb(255 255 253 / .92);
+  --dsm-glass-rim: rgb(255 254 247 / .36);
+  --dsm-glass-border: rgb(109 90 63 / .25);
+  --dsm-glass-reflection: linear-gradient(151deg, rgb(255 255 253 / .55), rgb(255 255 253 / .12) 30%, transparent 52%, rgb(255 254 247 / .28));
+  --dsm-glass-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath d='M0 0h144v144H0z' filter='url(%23f)' opacity='.12'/%3E%3C/svg%3E");
+  --dsm-glass-bevel: inset 0 1px 0 var(--dsm-glass-shine), inset 0 0 0 1px var(--dsm-glass-rim);
+  --dsm-backdrop:
+    radial-gradient(ellipse 510px 185px at 97% 9%, rgb(180 151 112 / .38), transparent 100%),
+    radial-gradient(ellipse 450px 290px at 104% 57%, rgb(160 133 97 / .36), transparent 100%),
+    radial-gradient(ellipse 530px 275px at 83% 100%, rgb(196 168 128 / .35), transparent 100%),
+    radial-gradient(ellipse 450px 480px at -124px 64%, rgb(171 143 107 / .35), transparent 100%),
+    radial-gradient(ellipse 555px 190px at 25% -5%, rgb(182 157 120 / .27), transparent 100%),
+    var(--dsm-paper);
+  --dsm-code-bg: #F1EDE4;
+  --dsm-code-keyword: #8A4B63;
+  --dsm-code-string: #5E7B58;
+  --dsm-code-number: #A5762E;
+  --dsm-code-function: #3E6B7E;
+  --dsm-code-comment: #766F63;
+  --dsm-font-read: "Lora Variable", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", SimSun, Georgia, serif;
+  --dsm-font-ui: Poppins, "Microsoft YaHei UI", "PingFang SC", "Noto Sans SC", sans-serif;
+  --dsm-mono: "Cascadia Mono", Consolas, "Noto Sans SC", "Microsoft YaHei UI", monospace;
+  --dsm-radius-control: 10px;
+  --dsm-radius-card: 16px;
+  --dsm-radius-container: 24px;
+  --dsm-radius-float: 20px;
+  --dsm-shadow-float: 0 12px 32px -12px rgba(43,41,38,.18);
+  --dsm-shadow-card: 0 4px 13px -5px rgba(43,41,38,.18);
+  --dsm-hover: color-mix(in srgb, var(--dsm-ink) 5%, transparent);
+  --dsm-focus-line: #947650;
+  --dsm-focus-border: color-mix(in srgb,var(--dsm-focus-line) 48%,var(--dsm-line));
+  --dsm-focus-ring: 0 0 0 3px color-mix(in srgb,var(--dsm-focus-border) 25%,transparent);
+  --dsm-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' d='m9 5 7 7-7 7'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+:root:is(.dsm-enabled, .dsm-popup)[data-dsm-theme="dark"] {
+  --dsm-paper: #211F1C;
+  --dsm-surface: #2C2823;
+  --dsm-surface-2: #353029;
+  --dsm-ink: #F0EAE1;
+  --dsm-muted: #C6BCB0;
+  --dsm-line: #51483E;
+  --dsm-accent: #EEB092;
+  --dsm-on-accent: #2A2420;
+  --dsm-selected: #3B342B;
+  --dsm-ok: #ABC1A1;
+  --dsm-error: #F6ACA2;
+  --dsm-glass: rgb(44 38 32 / .47);
+  --dsm-panel-glass: rgb(45 39 33 / .55);
+  --dsm-modal-glass: rgb(44 39 33 / .84);
+  --dsm-glass-shine: rgb(255 231 197 / .23);
+  --dsm-glass-rim: rgb(255 238 218 / .07);
+  --dsm-glass-border: rgb(196 161 121 / .30);
+  --dsm-glass-reflection: linear-gradient(151deg, rgb(248 219 185 / .12), rgb(248 219 185 / .03) 30%, transparent 52%, rgb(245 209 163 / .09));
+  --dsm-backdrop:
+    radial-gradient(ellipse 510px 185px at 97% 9%, rgb(132 98 65 / .38), transparent 100%),
+    radial-gradient(ellipse 450px 290px at 104% 57%, rgb(116 85 62 / .33), transparent 100%),
+    radial-gradient(ellipse 530px 275px at 83% 100%, rgb(104 72 53 / .34), transparent 100%),
+    radial-gradient(ellipse 450px 480px at -124px 64%, rgb(123 92 63 / .34), transparent 100%),
+    radial-gradient(ellipse 555px 190px at 25% -5%, rgb(117 85 55 / .28), transparent 100%),
+    var(--dsm-paper);
+  --dsm-code-bg: #302B25;
+  --dsm-code-keyword: #DC9CB3;
+  --dsm-code-string: #B0C4A3;
+  --dsm-code-number: #DFB775;
+  --dsm-code-function: #95BCCB;
+  --dsm-code-comment: #B4A99A;
+  --dsm-shadow-float: 0 12px 32px -12px rgba(0,0,0,.58);
+  --dsm-focus-line: #CFB18B;
+  color-scheme: dark;
+}
